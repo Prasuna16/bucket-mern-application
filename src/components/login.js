@@ -3,18 +3,15 @@ import React from 'react'
 import { Link, Redirect } from 'react-router-dom';
 import Header from './header';
 
-var CryptoJS = require("crypto-js");
-
 class Login extends React.Component {
     constructor() {
         super();
-        this.data = [];
-        this.encrypted = "";
         this.state = {
             email: null,
             password: null,
             submitted: false,
             credentials: false,
+            id: null,
             name: null,
         }
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,22 +33,16 @@ class Login extends React.Component {
         Axios.get('http://localhost:8080/getusers/')
             .then(res => {
                 var users = res.data;
-                console.log("complete ", users)
                 for (let i = 0; i < users.length; i++) {
                     if (users[i].email === this.state.email && users[i].password === this.state.password) {
-                        this.data = [{
-                            mail: users[i].email,
-                            pass: users[i].password,
-                        }]
-                        this.encrypted = CryptoJS.AES.encrypt(JSON.stringify(this.data), 'my-secret-key@123').toString();
                         this.setState({
                             credentials: true,
                             name: users[i].name,
+                            id: users[i]._id,
                         })
                         break;
                     }
                 }
-                console.log(this.data);
             })
         this.setState({
             submitted: true,
@@ -59,9 +50,8 @@ class Login extends React.Component {
     }
     render() {
         if (this.state.submitted && this.state.credentials) {
-            // console.log(this.encrypted);
             return (
-                <Redirect to= {"/todos/" + this.encrypted} />
+                <Redirect to= {"/todos/" + this.state.id} />
             )
         }
         const error = <center><div style={{color: "red", fontFamily: "Helvetica"}}>Incorrect credentials.</div></center>

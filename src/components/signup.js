@@ -41,20 +41,18 @@ class Signup extends React.Component {
         }
         axios.post('http://localhost:8080/adduser/', user)
             .then(res => {
-                console.log(res);
                 this.setState({
                     email: null,
                     password: null,
                     name: null,
                     submitted: true,
                 })
-                this.props.handleSuccessfulAuth(res);
             })
     }
     render() {
         if (this.state.submitted) {
             return (
-                <Redirect to="/" />
+                <Redirect to="/login" />
             )
         }
         return (

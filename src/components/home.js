@@ -2,16 +2,9 @@ import React from 'react'
 import Header from './header'
 import AOS from 'aos'
 import "aos/dist/aos.css";
+import { Link } from 'react-router-dom';
 
 class Home extends React.Component {
-    constructor(props) {
-        super(props);
-        
-        this.handleSuccessfulAuth = this.handleSuccessfulAuth.bind(this);
-    }
-    handleSuccessfulAuth(data) {
-        this.props.history.push("/");
-    }
     componentDidMount () {
         AOS.init({
             offset: 200,
@@ -19,7 +12,6 @@ class Home extends React.Component {
         });
     }
     render() {
-        console.log(this.props.status);
         return (
             <div>
                 <Header />
@@ -37,7 +29,7 @@ class Home extends React.Component {
                                 and transformed in some way or when a teacher gives examples of good notes.
                                 So, what are you waiting for? Start creating your notes!!
                             </p>
-                            <a href="google.com" className="btn">Create a new note</a>
+                            <Link to="/login"><a href="google.com" className="btn">Create a new note</a></Link>
                         </div>
                     </section>
                     <section className="card" data-aos="fade-right">
@@ -49,7 +41,7 @@ class Home extends React.Component {
                                 make you feel grounded. Seeing a clear outline of your completed and uncompleted 
                                 tasks will help you feel organized and stay mentally focused.
                                 So, what are you waiting for? Start scheduling!!</p>
-                            <a href="google.com" className="btn">Create your todo list</a>
+                                <Link to="/login"><a href="google.com" className="btn">Create your todo list</a></Link>
                         </div>
                     </section>
                     <section className="card" data-aos="fade-left">
@@ -61,7 +53,7 @@ class Home extends React.Component {
                                 proponent of learning. I try to learn new stuff every day.
                                 This application is developed to help every one organise their tasks and make
                                 them always remind of those.</p>
-                            <a href="https://prasuna16.github.io/" className="btn">See my works</a>
+                            <a href="https://prasuna16.github.io/" target="_blank" className="btn">See my works</a>
                         </div>
                     </section>
                     <section className="card" data-aos="fade-right">

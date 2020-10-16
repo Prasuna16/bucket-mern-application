@@ -7,8 +7,12 @@ import { Link } from "react-router-dom";
 class AllTodos extends React.Component {
     constructor() {
         super();
+        this.empty = true;
         this.state = {
             todos: [],
+            credentials: false,
+            name: null,
+            redirect: false,
         }
         this.handleChange = this.handleChange.bind(this);
     }
@@ -22,13 +26,12 @@ class AllTodos extends React.Component {
             .catch((err) => {
                 console.log(err);
             })
-        console.log(this.props.match.params.mail);
     }
     handleChange(id) {
-        console.log('todos', this.state.todos)
         for (let i = 0; i < this.state.todos.length; i++) {
             if (this.state.todos[i]._id === id) {
                 var todo = {
+                    user_id: this.state.todos[i].user_id,
                     heading: this.state.todos[i].heading,
                     description: this.state.todos[i].description,
                     dueDate: this.state.todos[i].dueDate,
@@ -40,12 +43,10 @@ class AllTodos extends React.Component {
             this.setState(prevState => {
                 const updatedTodos = prevState.todos.map(todo => {
                     if (todo._id === id) {
-                        console.log(todo.isDone, todo.heading)
                         todo.isDone = !todo.isDone
                     }
                     return todo
                 })
-                console.log(updatedTodos)
                 return {
                     todos: updatedTodos
                 }
@@ -54,19 +55,24 @@ class AllTodos extends React.Component {
     }
     todosList() {
         return this.state.todos.map(todo => {
+            if (todo.user_id !== this.props.match.params.user) return null;
+            this.empty = false;
             return <TodoItem key={todo._id} todo={todo} handleChange={this.handleChange} />
         })
     }
     render() {
         return (
             <div>
-                <Header />
+                {this.props.match.params.user ? <Header user={this.props.match.params.user} /> : <Header />}
                 <div className="todo-list" style={{marginBottom: "60px"}}>
                     YOUR TODO LIST
-                    <Link to="/createtodo"><span style={{fontSize: "15px", fontFamily: "Helvetica", fontWeight: "bold", textDecoration: "underline"}}>+ADD A NEW TODO</span></Link>
+                    <div style={{display: "flex", justifyContent: "space-between"}}>
+                        <Link to={"/createtodo/" + this.props.match.params.user}><button className="bttn-add">+ADD A NEW TODO</button></Link>
+                        <Link to={"/delete-all-todos/" + this.props.match.params.user}><button className="bttn-delete">-DELETE DONE TODOS</button></Link>
+                    </div>
                     {this.todosList()}
+                    {this.empty && <img src={require('./empty.png')} style={{width: "350px", height: "250px"}} alt="" />}
                     <br />
-                    <Link to="/delete-all-todos"><span style={{fontSize: "15px", fontFamily: "Helvetica", fontWeight: "bold", textDecoration: "underline"}}>-DELETE ALL COMPLETED TODOS</span></Link>
                 </div>
             </div>
         )    

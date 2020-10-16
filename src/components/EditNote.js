@@ -4,10 +4,11 @@ import axios from 'axios'
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 
-class EditTodo extends React.Component {
+class EditNote extends React.Component {
     constructor() {
         super();
         this.state = {
+            user_id: null,
             heading: null,
             description: null,
             dueDate: null,
@@ -16,7 +17,6 @@ class EditTodo extends React.Component {
             notFound: false,
         }
         this.onHeadingChange = this.onHeadingChange.bind(this);
-        this.onDateChange = this.onDateChange.bind(this);
         this.onDescChange = this.onDescChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -30,22 +30,19 @@ class EditTodo extends React.Component {
             description: e.target.value
         })
     }
-    onDateChange(e) {
-        this.setState({
-            dueDate: e.target.value
-        })
-    }
     handleSubmit(e) {
         e.preventDefault();
-        const newTodo = {
+        const newNote = {
+            user_id: this.props.match.params.user,
             heading: this.state.heading,
             description: this.state.description,
             dueDate: this.state.dueDate,
             isDone: false,
         }
-        axios.post('http://localhost:8080/edit-todo/' + this.props.match.params.id, newTodo)
+        axios.post('http://localhost:8080/edit-note/' + this.props.match.params.id, newNote)
             .then(res => {
                 this.setState({
+                    user_id: null,
                     heading: null,
                     description: null,
                     dueDate: null,
@@ -55,18 +52,16 @@ class EditTodo extends React.Component {
             });
     }
     componentDidMount() {
-        axios.get('http://localhost:8080/gettodos/')
+        axios.get('http://localhost:8080/getnotes/')
             .then(response => {
-                var todos = response.data
+                var notes = response.data
                 var flag = false
-                for (let i = 0; i < todos.length; i++) {
-                    if (todos[i]._id === this.props.match.params.id) {
+                for (let i = 0; i < notes.length; i++) {
+                    if (notes[i]._id === this.props.match.params.id) {
                         flag = true;
-                        var datee = new Date(todos[i].dueDate).toISOString().slice(0,10);
                         this.setState({
-                            heading: todos[i].heading,
-                            description: todos[i].description,
-                            dueDate: datee,
+                            heading: notes[i].heading,
+                            description: notes[i].description,
                         })
                     }
                 }
@@ -83,21 +78,19 @@ class EditTodo extends React.Component {
     render() {
         if (this.state.notFound || this.state.submitted) {
             return (
-                <Redirect to={"/todos/" + this.props.match.params.user} />
+                <Redirect to={"/notes/" + this.props.match.params.user} />
             )
         }
         return (
             <div>
                 {this.props.match.params.user ? <Header user={this.props.match.params.user} /> : <Header />}
                 <form className="todo-box">
-                    <h1 style={{lineHeight: "1px"}}>EDIT TODO</h1><Link to={"/todos/" + this.props.match.params.user}><span style={{fontSize: "15px", fontFamily: "Helvetica", fontWeight: "bold", textDecoration: "underline"}}>Click here to view all todos</span></Link>
-                    <h4>Todo</h4>
+                    <h1 style={{lineHeight: "1px"}}>EDIT NOTE</h1><Link to={"/notes/" + this.props.match.params.user}><span style={{fontSize: "15px", fontFamily: "Helvetica", fontWeight: "bold", textDecoration: "underline"}}>Click here to view all notes</span></Link>
+                    <h4>Note Heading</h4>
                     <input type="text" name="" className="todo-heading" onChange={this.onHeadingChange} value={this.state.heading} />
-                    <h4>Due Date</h4>
-                    <input type="date" name="" className="todo-date" onChange={this.onDateChange} value={this.state.dueDate} />
                     <h4>Description</h4>
                     <textarea name="" className="todo-area" cols="30" rows="10" onChange={this.onDescChange} value={this.state.description} ></textarea>
-                    <button type="submit" className="todo-add-btn" onClick={this.handleSubmit}> Edit Todo </button>
+                    <button type="submit" className="todo-add-btn" onClick={this.handleSubmit}> Edit Note </button>
                 </form>
                 <br /><br />
             </div>
@@ -105,4 +98,4 @@ class EditTodo extends React.Component {
     }
 }
 
-export default EditTodo
+export default EditNote

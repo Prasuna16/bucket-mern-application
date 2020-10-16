@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { Redirect } from 'react-router';
 
-class DeleteTodo extends React.Component {
+class DeleteNote extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -10,7 +10,7 @@ class DeleteTodo extends React.Component {
         }
     }
     componentDidMount() {
-        axios.get('http://localhost:8080/delete-todo/' + this.props.match.params.id)
+        axios.get('http://localhost:8080/delete-note/' + this.props.match.params.id)
             .then(res => {
                 this.setState({
                     deleted: true,
@@ -20,7 +20,7 @@ class DeleteTodo extends React.Component {
     render() {
         if (this.state.deleted) {
             return (
-                <Redirect to={"/todos/" + this.props.match.params.user} />
+                <Redirect to={"/notes/" + this.props.match.params.user} />
             )
         }
         return (
@@ -31,4 +31,4 @@ class DeleteTodo extends React.Component {
     }
 }
 
-export default DeleteTodo
+export default DeleteNote

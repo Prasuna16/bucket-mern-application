@@ -26,7 +26,7 @@ class Header extends React.Component {
                     <div className="brand">
                         <Link to="/">bucket</Link>
                     </div>
-                    {this.state.session ? <div className="header-links"><Link to="/todos">TODOS</Link><Link to="/notes">NOTES</Link></div> : <div className="header-links"><Link to="/login">Login</Link></div>}
+                    {this.props.user ? <div className="header-links"><Link to={"/todos/" + this.props.user}>TODOS</Link><Link to={"/notes/" + this.props.user}>NOTES</Link><Link to="/">LOGOUT</Link></div> : <div className="header-links"><Link to="/login">Login</Link></div>}
                 </header>
             </div>
         );

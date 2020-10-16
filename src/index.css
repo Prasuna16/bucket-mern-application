@@ -250,6 +250,46 @@ textarea:focus, input:focus{
 
 /* create todo */
 
+.bttn-add {
+  border:0;
+  background: none;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  border: 2px solid #06d6a0;
+  padding: 6px 15px;
+  outline: none;
+  color: black;
+  border-radius: 24px;
+  transition: 0.25s;
+  cursor: pointer;
+  font-size: 17px;
+}
+.bttn-add:hover{
+  background: #06d6a0;
+  color: white;
+}
+
+.bttn-delete {
+  border:0;
+  background: none;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  border: 2px solid #247ba0;
+  padding: 6px 15px;
+  outline: none;
+  color: black;
+  border-radius: 24px;
+  transition: 0.25s;
+  cursor: pointer;
+  font-size: 17px;
+}
+.bttn-delete:hover{
+  background: #247ba0;
+  color: white;
+}
+
 .todo-box {
   display: flex;
   flex-direction: column;
@@ -357,6 +397,11 @@ textarea:focus, input:focus, button:focus{
   font-size: 1rem;
 }
 
+.note-heading-items {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* todo */
 .todo-list {
   background-color: white;
@@ -419,5 +464,66 @@ input[type=checkbox]:focus {
 }
 
 .todo-edit:hover, .todo-delete:hover {
+  cursor: pointer;
+}
+
+.popup .overlay {
+  position:fixed;
+  top:0px;
+  left:0px;
+  width:100vw;
+  height:100vh;
+  background:rgba(0,0,0,0.7);
+  z-index:1;
+  display:none;
+}
+
+.popup .content {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  background:#fff;
+  width: auto;
+  height:auto;
+  z-index: 2;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: "Open Sans",sans-serif;
+}
+
+.popup .close-btn {
+  cursor:pointer;
+  position:absolute;
+  right:20px;
+  top:20px;
+  width:30px;
+  height:30px;
+  background:#222;
+  color:#fff;
+  font-size:25px;
+  font-weight:600;
+  line-height:30px;
+  text-align:center;
+  border-radius:50%;
+}
+
+.popup.active .overlay {
+  display:block;
+}
+
+.popup.active .content {
+  transition:all 300ms ease-in-out;
+  transform:translate(-50%,-50%) scale(1);
+}
+
+.button-popup {
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.button-popup:hover {
   cursor: pointer;
 }

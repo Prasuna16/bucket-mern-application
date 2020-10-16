@@ -36,12 +36,8 @@ class CreateTodo extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state);
-        if (!this.state.heading) {
-            console.log("error - heading empty");
-            return;
-        }
         const newTodo = {
+            user_id: this.props.match.params.user,
             heading: this.state.heading,
             description: this.state.description,
             dueDate: this.state.dueDate,
@@ -49,7 +45,6 @@ class CreateTodo extends React.Component {
         }
         axios.post('http://localhost:8080/addtodo', newTodo)
             .then(res => {
-                console.log(res.data)
                 this.setState({
                     heading: null,
                     description: null,
@@ -62,14 +57,14 @@ class CreateTodo extends React.Component {
     render() {
         if (this.state.submitted) {
             return (
-                <Redirect to="/todos" />
+                <Redirect to={"/todos/" + this.props.match.params.user} />
             )
         }
         return (
             <div>
-                <Header />
+                {this.props.match.params.user ? <Header user={this.props.match.params.user} /> : <Header />}
                 <form className="todo-box">
-                    <h1 style={{lineHeight: "1px"}}>CREATE NEW TODO</h1><Link to="/todos"><span style={{fontSize: "15px", fontFamily: "Helvetica", fontWeight: "bold", textDecoration: "underline"}}>Click here to view all todos</span></Link>
+                    <h1 style={{lineHeight: "1px"}}>CREATE NEW TODO</h1><Link to={"/todos/" + this.props.match.params.user}><span style={{fontSize: "15px", fontFamily: "Helvetica", fontWeight: "bold", textDecoration: "underline"}}>Click here to view all todos</span></Link>
                     <h4>Todo</h4>
                     <input type="text" name="" className="todo-heading" onChange={this.onHeadingChange} />
                     <h4>Due Date</h4>

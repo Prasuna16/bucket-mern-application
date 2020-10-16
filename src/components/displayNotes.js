@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 class DisplayNotes extends React.Component {
     constructor() {
         super();
+        this.empty = true;
         this.state = {
             notes: [],
         }
@@ -24,17 +25,20 @@ class DisplayNotes extends React.Component {
     }
     notesList() {
         return this.state.notes.map(note => {
+            if (note.user_id !== this.props.match.params.user) return null;
+            this.empty = false;
             return <NoteElement key={note._id} note={note} />
         })
     }
     render() {
         return (
             <div>
-                <Header />
-                <center><Link to="/createnote"><span style={{fontSize: "15px", fontFamily: "Helvetica", fontWeight: "bold", textDecoration: "underline"}}>+ADD A NEW NOTE</span></Link></center>
+                {this.props.match.params.user ? <Header user={this.props.match.params.user} /> : <Header />}
+                <center><Link to={"/createnote/" + this.props.match.params.user}><button className="bttn" style={{fontSize: "20px", fontFamily: "Helvetica", fontWeight: "bold", marginTop: "0px", marginBottom: "0px", padding: "6px 18px" }}>+ADD A NEW NOTE</button></Link></center>
                 <br />
                 <ul className="notes-all">
                     {this.notesList()}
+                    {this.empty && <img src={require('./empty.png')} style={{width: "450px", height: "350px"}} alt="" />}
                 </ul>
             </div>
         )

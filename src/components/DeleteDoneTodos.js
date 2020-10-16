@@ -14,6 +14,9 @@ class DeleteAllTodos extends React.Component {
             .then(response => {
                 var todos = response.data;
                 for (let i = 0; i < todos.length; i++) {
+                    if (todos[i].user_id !== this.props.match.params.user) {
+                        continue;
+                    }
                     if (todos[i].isDone) {
                         axios.get('http://localhost:8080/delete-todo/' + todos[i]._id)
                         .then(res => {
@@ -34,7 +37,7 @@ class DeleteAllTodos extends React.Component {
     render() {
         if (this.state.deleted) {
             return (
-                <Redirect to="/todos" />
+                <Redirect to={"/todos/" + this.props.match.params.user} />
             )
         }
         return (

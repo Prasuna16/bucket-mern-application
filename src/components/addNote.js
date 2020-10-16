@@ -8,6 +8,7 @@ class CreateNote extends React.Component {
     constructor() {
         super();
         this.state = {
+            user_id: null,
             heading: null,
             description: null,
             submitted: false,
@@ -28,19 +29,15 @@ class CreateNote extends React.Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state);
-        if (!this.state.heading) {
-            console.log("error - heading empty");
-            return;
-        }
         const newNote = {
+            user_id: this.props.match.params.user,
             heading: this.state.heading,
             description: this.state.description,
         }
         axios.post('http://localhost:8080/addnote', newNote)
             .then(res => {
-                console.log(res.data)
                 this.setState({
+                    user_id: null,
                     heading: null,
                     description: null,
                     submitted: true,
@@ -50,14 +47,14 @@ class CreateNote extends React.Component {
     render() {
         if (this.state.submitted) {
             return (
-                <Redirect to="/notes" />
+                <Redirect to={"/notes/" + this.props.match.params.user} />
             )
         }
         return (
             <div>
-                <Header />
+                {this.props.match.params.user ? <Header user={this.props.match.params.user} /> : <Header />}
                 <form className="note-box">
-                    <h1 style={{lineHeight: "1px"}}>CREATE NEW NOTE</h1><Link to="/notes"><span style={{fontSize: "15px", fontFamily: "Helvetica", fontWeight: "bold", textDecoration: "underline"}}>Click here to view all notes</span></Link>
+                    <h1 style={{lineHeight: "1px"}}>CREATE NEW NOTE</h1><Link to={"/notes/" + this.props.match.params.user}><span style={{fontSize: "15px", fontFamily: "Helvetica", fontWeight: "bold", textDecoration: "underline"}}>Click here to view all notes</span></Link>
                     <h4>Title of your note</h4>
                     <input type="text" name="" className="note-heading" onChange={this.onHeadingChange} />
                     <h4>Description</h4>
